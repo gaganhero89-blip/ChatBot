@@ -1,13 +1,16 @@
-FROM python:latest
+FROM python:3.11-slim
 
-RUN apt-get update -y && apt-get upgrade -y
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-RUN pip3 install -U pip
+WORKDIR /app
 
-COPY . /app/
-WORKDIR /app/
-RUN pip3 install --upgrade pip
-RUN pip3 install -U -r requirements.txt
+COPY requirements.txt .
 
-CMD bash start
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
+COPY . .
+
+# CHANGE bot.py to your actual bot file name
+CMD ["python", "bot.py"]
